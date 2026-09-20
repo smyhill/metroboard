@@ -46,7 +46,20 @@ REMOTE_COMMAND
 fi
 
 if [ "$launch_kiosk" -eq 1 ]; then
-  ssh "$target" "nohup '$remote_dir/scripts/kiosk.sh' >'$remote_dir/kiosk.log' 2>&1 &"
+  ssh "$target" "METROBOARD_APP_DIR='$remote_dir' sh -s" <<'REMOTE_COMMAND'
+set -eu
+pid_file="$METROBOARD_APP_DIR/metroboard-kiosk.pid"
+
+if [ -f "$pid_file" ]; then
+  previous_pid=$(cat "$pid_file")
+  if kill -0 "$previous_pid" 2>/dev/null; then
+    kill "$previous_pid"
+  fi
+fi
+
+nohup "$METROBOARD_APP_DIR/scripts/kiosk.sh" >"$METROBOARD_APP_DIR/kiosk.log" 2>&1 &
+echo $! >"$pid_file"
+REMOTE_COMMAND
   echo "Chromium kiosk launch requested on $target."
 fi
 

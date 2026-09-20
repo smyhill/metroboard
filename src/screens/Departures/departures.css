@@ -36,7 +36,7 @@
 .terminal-header {
   position: relative;
   z-index: 1;
-  height: 105px;
+  height: 90px;
   display: grid;
   grid-template-columns: 150px 1fr 220px;
   align-items: start;
@@ -81,16 +81,16 @@
 .terminal-body {
   position: relative;
   z-index: 1;
-  height: calc(100% - 105px);
+  height: calc(100% - 90px);
   display: grid;
   grid-template-columns: 318px minmax(0, 1fr) 345px;
 }
 
-.line-selector { padding: 14px 20px 0 0; border-right: 2px solid #e96010; }
+.line-selector { padding: 9px 20px 0 0; border-right: 2px solid #e96010; }
 .line-option {
   position: relative;
   width: 100%;
-  height: 45px;
+  height: 38px;
   padding: 0 16px;
   display: flex;
   align-items: center;
@@ -110,19 +110,19 @@
 .line-option--active { color: #090807; background: #ff7417; clip-path: polygon(0 0, calc(100% - 19px) 0, 100% 50%, calc(100% - 19px) 100%, 0 100%); box-shadow: 0 0 10px rgba(255, 100, 15, .32); }
 .line-option--active .line-marker { opacity: 1; }
 
-.departure-board { min-width: 0; padding: 14px 30px 0 38px; }
+.departure-board { min-width: 0; padding: 9px 30px 0 38px; }
 .departure-labels, .departure-row { display: grid; grid-template-columns: minmax(0, 1fr) 75px 74px; align-items: center; }
-.departure-labels { height: 27px; border-bottom: 1px dashed rgba(255, 116, 23, .43); color: #ff8d3d; text-transform: uppercase; font-size: 18px; font-weight: 700; letter-spacing: .1em; }
+.departure-labels { height: 22px; border-bottom: 1px dashed rgba(255, 116, 23, .43); color: #ff8d3d; text-transform: uppercase; font-size: 16px; font-weight: 700; letter-spacing: .1em; }
 .departure-labels span:nth-child(2), .departure-labels span:nth-child(3), .departure-minutes, .departure-track { text-align: center; }
 
-.departure-row { height: 50px; border-bottom: 1px dashed rgba(255, 116, 23, .35); text-shadow: 0 0 6px rgba(255, 91, 12, .27); }
-.departure-destination { min-width: 0; font-size: 32px; font-weight: 700; line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
-.departure-minutes, .departure-track { font-size: 34px; font-weight: 700; }
-.fixture-note { margin: 7px 0 0; color: #aa4a14; text-transform: uppercase; font-size: 9px; letter-spacing: .08em; }
+.departure-row { height: 42px; border-bottom: 1px dashed rgba(255, 116, 23, .35); text-shadow: 0 0 6px rgba(255, 91, 12, .27); }
+.departure-destination { min-width: 0; font-size: 29px; font-weight: 700; line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
+.departure-minutes, .departure-track { font-size: 30px; font-weight: 700; }
+.fixture-note { margin: 6px 0 0; color: #aa4a14; text-transform: uppercase; font-size: 9px; letter-spacing: .08em; }
 
 .terminal-art { min-width: 0; padding: 12px 0 0 35px; border-left: 2px solid #e96010; color: #ff7417; }
-.art-top { height: 151px; display: grid; grid-template-columns: minmax(0, 1fr) 109px; align-items: center; }
-.train-illustration { width: 100%; height: 145px; filter: drop-shadow(0 0 3px rgba(255, 96, 14, .25)); }
+.art-top { height: 136px; display: grid; grid-template-columns: minmax(0, 1fr) 109px; align-items: center; }
+.train-illustration { width: 100%; height: 130px; filter: drop-shadow(0 0 3px rgba(255, 96, 14, .25)); }
 .art-top p { margin: 0; padding-left: 7px; font-size: 14px; font-weight: 700; line-height: 1.35; letter-spacing: .11em; text-transform: uppercase; }
 .skyline-area { display: flex; flex-direction: column; align-items: center; }
 .skyline { width: 100%; height: 59px; }
