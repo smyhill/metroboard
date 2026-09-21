@@ -120,8 +120,10 @@
 .departure-list { height: 168px; overflow: hidden; }
 .departure-destination { min-width: 0; font-size: 29px; font-weight: 700; line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
 .departure-minutes, .departure-track { font-size: 30px; font-weight: 700; }
-.data-status { width: 100%; margin-top: 6px; padding: 0; color: #aa4a14; border: 0; background: transparent; text-align: left; text-transform: uppercase; font: inherit; font-size: 9px; letter-spacing: .08em; cursor: pointer; }
+.data-status { width: 100%; margin-top: 3px; padding: 0; overflow: hidden; color: #aa4a14; border: 0; background: transparent; text-align: left; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; font: inherit; font-size: 9px; line-height: 1.2; letter-spacing: .08em; cursor: pointer; }
 .data-status--error { color: #ff9a5a; }.data-status:disabled { cursor: wait; }
+.service-alert { margin: 2px 0 0; overflow: hidden; color: #ff9a5a; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; font-size: 9px; line-height: 1.2; letter-spacing: .06em; }
+.service-alert--unknown { color: #aa4a14; }
 .no-departures { margin: 18px 0 0; color: #ff9a5a; font-size: 15px; line-height: 1.35; text-transform: uppercase; }
 
 .station-picker { min-width: 0; padding: 10px 30px 0 38px; }

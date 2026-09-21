@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { railLines } from '../../data/metro'
 import type { Departure, LineCode, Station } from '../../data/metro'
-import { useDepartures, useStations } from '../../hooks/useMetroData'
+import { useDepartures, useIncidents, useStations } from '../../hooks/useMetroData'
 import './departures.css'
 
 const STATIONS_PER_PAGE = 8
@@ -93,6 +93,7 @@ export function DeparturesScreen() {
   const [line, setLine] = useState<LineCode>('RD')
   const [selectingStation, setSelectingStation] = useState(false)
   const { data, error, loading, refresh } = useDepartures(station, line)
+  const { incidents, unavailable: incidentsUnavailable } = useIncidents(line)
   const stationName = data?.station.name ?? station.name
   const departures = data?.departures ?? []
   const visibleDepartures = departures.slice(0, MAX_VISIBLE_DEPARTURES)
@@ -104,7 +105,7 @@ export function DeparturesScreen() {
   return <main className="metroboard" aria-label={`MetroBoard departures for ${stationName}`}><section className="terminal-panel">
     <header className="terminal-header"><MetroMark /><div className="station-heading"><h1>{selectingStation ? 'Select Station' : stationName}</h1><p>{selectingStation ? 'Choose a stop' : 'Departures'}</p></div><time className="clock" dateTime={new Date().toISOString()}><span>{clock.date}</span><strong>{clock.time}</strong></time></header>
     <div className="terminal-body"><LineSelector activeLine={line} onSelect={chooseLine} />
-      {selectingStation ? <StationPicker line={line} stations={stations} onChoose={chooseStation} onClose={() => setSelectingStation(false)} /> : <section className="departure-board" aria-label={`${line} Line departures`}><div className="departure-labels" aria-hidden="true"><span>Destination</span><span>Min</span><span>Track</span></div><div className="departure-list">{visibleDepartures.map((departure, index) => <DepartureRow departure={departure} key={`${departure.destination}-${departure.minutes}-${index}`} />)}</div>{departures.length === 0 && !loading && <p className="no-departures">No departures are currently posted for this line.</p>}<button className={`data-status ${error ? 'data-status--error' : ''}`} type="button" onClick={() => refresh()} disabled={loading}>{status}</button></section>}
+      {selectingStation ? <StationPicker line={line} stations={stations} onChoose={chooseStation} onClose={() => setSelectingStation(false)} /> : <section className="departure-board" aria-label={`${line} Line departures`}><div className="departure-labels" aria-hidden="true"><span>Destination</span><span>Min</span><span>Track</span></div><div className="departure-list">{visibleDepartures.map((departure, index) => <DepartureRow departure={departure} key={`${departure.destination}-${departure.minutes}-${index}`} />)}</div>{departures.length === 0 && !loading && <p className="no-departures">No departures are currently posted for this line.</p>}<button className={`data-status ${error ? 'data-status--error' : ''}`} type="button" onClick={() => refresh()} disabled={loading}>{status}</button>{incidents[0] && <p className="service-alert" title={incidents[0].summary}>Service alert · {incidents[0].summary}</p>}{!incidents[0] && incidentsUnavailable && <p className="service-alert service-alert--unknown">Service alert feed unavailable</p>}</section>}
       <aside className="terminal-art" aria-label="Washington Metro information display"><div className="art-top"><TrainIllustration /><p>Real time<br />departures<br />for the<br />Washington DC<br />area</p></div><div className="skyline-area"><Skyline /><span>Washington Metropolitan Area Transit Authority</span></div></aside>
     </div>
   </section></main>

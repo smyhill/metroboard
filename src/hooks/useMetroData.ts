@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { fetchDepartures, fetchStations } from '../api/metroboard'
+import { fetchDepartures, fetchIncidents, fetchStations } from '../api/metroboard'
 import { bethesdaStation } from '../data/metro'
 import type { DepartureResponse, LineCode, Station } from '../data/metro'
 
@@ -55,4 +55,26 @@ export function useStations() {
   }, [])
 
   return { stations, error }
+}
+
+export function useIncidents(line: LineCode) {
+  const [incidents, setIncidents] = useState<{ summary: string, severity: string }[]>([])
+  const [unavailable, setUnavailable] = useState(false)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const load = () => {
+      void fetchIncidents(line, controller.signal)
+        .then((response) => {
+          setIncidents(response.incidents)
+          setUnavailable(response.stale ?? false)
+        })
+        .catch(() => { if (!controller.signal.aborted) setUnavailable(true) })
+    }
+    load()
+    const interval = window.setInterval(load, 60_000)
+    return () => { controller.abort(); window.clearInterval(interval) }
+  }, [line])
+
+  return { incidents, unavailable }
 }

@@ -71,6 +71,16 @@ async function handleApi(url, response) {
     return
   }
 
+  if (url.pathname === '/api/incidents') {
+    const lineCode = url.searchParams.get('line')?.toUpperCase()
+    if (!lineCode || !/^(BL|GR|OR|RD|SV|YL)$/.test(lineCode)) {
+      sendJson(response, 400, { error: 'A valid WMATA line code is required.' })
+      return
+    }
+    sendJson(response, 200, await wmata.getIncidents(lineCode))
+    return
+  }
+
   sendJson(response, 404, { error: 'Not found.' })
 }
 

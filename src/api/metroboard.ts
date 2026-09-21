@@ -1,4 +1,4 @@
-import type { DepartureResponse, LineCode, StationsResponse } from '../data/metro'
+import type { DepartureResponse, IncidentsResponse, LineCode, StationsResponse } from '../data/metro'
 
 async function requestJson<T>(path: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(path, { signal })
@@ -14,4 +14,8 @@ export function fetchDepartures(stationCode: string, lineCode: LineCode, signal?
 
 export function fetchStations(signal?: AbortSignal) {
   return requestJson<StationsResponse>('/api/stations', signal)
+}
+
+export function fetchIncidents(lineCode: LineCode, signal?: AbortSignal) {
+  return requestJson<IncidentsResponse>(`/api/incidents?line=${lineCode}`, signal)
 }
