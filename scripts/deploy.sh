@@ -8,6 +8,7 @@ remote_dir=${METROBOARD_REMOTE_DIR:-/home/simon/metroboard}
 port=${METROBOARD_PORT:-4173}
 start_server=0
 launch_kiosk=0
+managed_services=0
 
 for option in "$@"; do
   case "$option" in
@@ -26,8 +27,15 @@ rsync -az --delete "$project_root/server/" "$target:$remote_dir/server/"
 rsync -az "$project_root/scripts/kiosk.sh" "$project_root/scripts/run-server.sh" "$target:$remote_dir/scripts/"
 ssh "$target" "chmod 755 '$remote_dir/scripts/kiosk.sh' '$remote_dir/scripts/run-server.sh'"
 
+if ssh "$target" "systemctl --user is-enabled --quiet metroboard-server.service"; then
+  managed_services=1
+fi
+
 if [ "$start_server" -eq 1 ]; then
-  ssh "$target" "METROBOARD_PORT='$port' METROBOARD_APP_DIR='$remote_dir' sh -s" <<'REMOTE_COMMAND'
+  if [ "$managed_services" -eq 1 ]; then
+    ssh "$target" "systemctl --user restart metroboard-server.service"
+  else
+    ssh "$target" "METROBOARD_PORT='$port' METROBOARD_APP_DIR='$remote_dir' sh -s" <<'REMOTE_COMMAND'
 set -eu
 pid_file="$METROBOARD_APP_DIR/metroboard-server.pid"
 log_file="$METROBOARD_APP_DIR/metroboard-server.log"
@@ -53,11 +61,15 @@ fi
 nohup env METROBOARD_PORT="$METROBOARD_PORT" METROBOARD_APP_DIR="$METROBOARD_APP_DIR" "$METROBOARD_APP_DIR/scripts/run-server.sh" >"$log_file" 2>&1 &
 echo $! >"$pid_file"
 REMOTE_COMMAND
+  fi
   echo "MetroBoard is serving locally on $target at http://127.0.0.1:$port"
 fi
 
 if [ "$launch_kiosk" -eq 1 ]; then
-  ssh "$target" "METROBOARD_APP_DIR='$remote_dir' sh -s" <<'REMOTE_COMMAND'
+  if [ "$managed_services" -eq 1 ]; then
+    ssh "$target" "systemctl --user restart metroboard-kiosk.service"
+  else
+    ssh "$target" "METROBOARD_APP_DIR='$remote_dir' sh -s" <<'REMOTE_COMMAND'
 set -eu
 pid_file="$METROBOARD_APP_DIR/metroboard-kiosk.pid"
 
@@ -71,6 +83,7 @@ fi
 nohup "$METROBOARD_APP_DIR/scripts/kiosk.sh" >"$METROBOARD_APP_DIR/kiosk.log" 2>&1 &
 echo $! >"$pid_file"
 REMOTE_COMMAND
+  fi
   echo "Chromium kiosk launch requested on $target."
 fi
 
