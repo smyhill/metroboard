@@ -81,6 +81,16 @@ async function handleApi(url, response) {
     return
   }
 
+  if (url.pathname === '/api/accessibility') {
+    const stationCode = url.searchParams.get('station')?.toUpperCase()
+    if (!stationCode || !/^[A-Z]\d{2}$/.test(stationCode)) {
+      sendJson(response, 400, { error: 'A valid WMATA station code is required.' })
+      return
+    }
+    sendJson(response, 200, await wmata.getAccessibilityIncidents(stationCode))
+    return
+  }
+
   sendJson(response, 404, { error: 'Not found.' })
 }
 

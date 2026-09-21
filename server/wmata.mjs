@@ -5,6 +5,7 @@ const WMATA_API_BASE_URL = 'https://api.wmata.com'
 const REQUEST_TIMEOUT_MS = 8_000
 const STATIONS_CACHE_TTL_MS = 24 * 60 * 60 * 1_000
 const INCIDENTS_CACHE_TTL_MS = 60_000
+const ACCESSIBILITY_CACHE_TTL_MS = 5 * 60 * 1_000
 
 const lineNames = {
   BL: 'Blue',
@@ -78,6 +79,22 @@ export function normalizeIncidents(incidents) {
     .filter((incident) => incident.id && incident.summary)
 }
 
+export function normalizeAccessibilityIncidents(incidents) {
+  if (!Array.isArray(incidents)) return []
+
+  return incidents
+    .map((incident) => ({
+      id: `${incident.StationCode ?? ''}:${incident.UnitName ?? ''}`,
+      stationCode: incident.StationCode,
+      unitType: incident.UnitType ?? 'Accessibility equipment',
+      unitName: incident.UnitName ?? 'Unit',
+      status: incident.UnitStatus ?? 'Out of service',
+      location: incident.LocationDescription ?? incident.StationName ?? '',
+      returnEstimate: incident.EstimatedReturnToService ?? null,
+    }))
+    .filter((incident) => incident.stationCode && incident.id)
+}
+
 async function fetchJson(url) {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
@@ -99,7 +116,7 @@ export class WmataClient {
     this.apiKey = apiKey
     this.apiBaseUrl = apiBaseUrl.replace(/\/$/, '')
     this.cachePath = cachePath
-    this.cache = { departures: {}, stations: null, incidents: null }
+    this.cache = { departures: {}, stations: null, incidents: null, accessibility: null }
     this.loaded = false
   }
 
@@ -112,6 +129,7 @@ export class WmataClient {
         departures: parsed && typeof parsed.departures === 'object' && parsed.departures !== null ? parsed.departures : {},
         stations: parsed?.stations ?? null,
         incidents: parsed?.incidents ?? null,
+        accessibility: parsed?.accessibility ?? null,
       }
     } catch {
       // A missing or corrupt cache must never prevent the display from starting.
@@ -214,6 +232,32 @@ export class WmataClient {
       return filterForLine(result)
     } catch (error) {
       if (cached) return filterForLine({ ...cached, source: 'cache', stale: true })
+      throw error
+    }
+  }
+
+  async getAccessibilityIncidents(stationCode) {
+    await this.loadCache()
+    const cached = this.cache.accessibility
+    if (!this.apiKey) return { incidents: [], source: 'fixture', updatedAt: timestamp() }
+
+    const filterForStation = (result) => ({
+      ...result,
+      incidents: result.incidents.filter((incident) => incident.stationCode === stationCode),
+    })
+
+    if (cached && Date.now() - Date.parse(cached.updatedAt) < ACCESSIBILITY_CACHE_TTL_MS) {
+      return filterForStation({ ...cached, source: 'cache' })
+    }
+
+    try {
+      const payload = await fetchJson(this.apiUrl('Incidents.svc/json/ElevatorIncidents'))
+      const result = { incidents: normalizeAccessibilityIncidents(payload.ElevatorIncidents), source: 'live', updatedAt: timestamp() }
+      this.cache.accessibility = result
+      await this.saveCache()
+      return filterForStation(result)
+    } catch (error) {
+      if (cached) return filterForStation({ ...cached, source: 'cache', stale: true })
       throw error
     }
   }

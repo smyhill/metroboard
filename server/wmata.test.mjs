@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { mkdtemp } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { normalizeIncidents, normalizePredictions, normalizeStations, WmataClient } from './wmata.mjs'
+import { normalizeAccessibilityIncidents, normalizeIncidents, normalizePredictions, normalizeStations, WmataClient } from './wmata.mjs'
 
 test('normalizes, filters, and sorts WMATA train predictions', () => {
   const predictions = normalizePredictions([
@@ -46,6 +46,27 @@ test('normalizes WMATA service incidents and their affected lines', () => {
     lines: ['RD', 'OR'],
     summary: 'Expect delays near Metro Center.',
     updatedAt: '2026-09-21T00:00:00',
+  }])
+})
+
+test('normalizes accessibility outage records', () => {
+  const incidents = normalizeAccessibilityIncidents([{
+    StationCode: 'A09',
+    UnitType: 'Escalator',
+    UnitName: 'ES-01',
+    UnitStatus: 'Out of Service',
+    LocationDescription: 'Platform to mezzanine',
+    EstimatedReturnToService: '2026-09-22T12:00:00',
+  }])
+
+  assert.deepEqual(incidents, [{
+    id: 'A09:ES-01',
+    stationCode: 'A09',
+    unitType: 'Escalator',
+    unitName: 'ES-01',
+    status: 'Out of Service',
+    location: 'Platform to mezzanine',
+    returnEstimate: '2026-09-22T12:00:00',
   }])
 })
 

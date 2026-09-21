@@ -124,6 +124,7 @@
 .data-status--error { color: #ff9a5a; }.data-status:disabled { cursor: wait; }
 .service-alert { margin: 2px 0 0; overflow: hidden; color: #ff9a5a; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; font-size: 9px; line-height: 1.2; letter-spacing: .06em; }
 .service-alert--unknown { color: #aa4a14; }
+.accessibility-alert { margin: 2px 0 0; overflow: hidden; color: #ffb47f; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; font-size: 9px; line-height: 1.2; letter-spacing: .06em; }
 .no-departures { margin: 18px 0 0; color: #ff9a5a; font-size: 15px; line-height: 1.35; text-transform: uppercase; }
 
 .station-picker { min-width: 0; padding: 10px 30px 0 38px; }
