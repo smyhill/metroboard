@@ -1,0 +1,16 @@
+[Unit]
+Description=MetroBoard Chromium kiosk
+Requires=metroboard-server.service
+After=metroboard-server.service
+
+[Service]
+Type=simple
+Environment=METROBOARD_URL=http://127.0.0.1:4173
+Environment=XDG_RUNTIME_DIR=%t
+ExecStartPre=/bin/sh -c 'until curl --fail --silent --output /dev/null http://127.0.0.1:4173/; do sleep 1; done'
+ExecStart=/home/simon/metroboard/scripts/kiosk.sh
+Restart=always
+RestartSec=4
+
+[Install]
+WantedBy=default.target

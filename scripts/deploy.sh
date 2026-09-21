@@ -23,8 +23,8 @@ npm run build
 ssh "$target" "mkdir -p '$remote_dir/dist' '$remote_dir/server' '$remote_dir/scripts'"
 rsync -az --delete "$project_root/dist/" "$target:$remote_dir/dist/"
 rsync -az --delete "$project_root/server/" "$target:$remote_dir/server/"
-rsync -az "$project_root/scripts/kiosk.sh" "$target:$remote_dir/scripts/kiosk.sh"
-ssh "$target" "chmod 755 '$remote_dir/scripts/kiosk.sh'"
+rsync -az "$project_root/scripts/kiosk.sh" "$project_root/scripts/run-server.sh" "$target:$remote_dir/scripts/"
+ssh "$target" "chmod 755 '$remote_dir/scripts/kiosk.sh' '$remote_dir/scripts/run-server.sh'"
 
 if [ "$start_server" -eq 1 ]; then
   ssh "$target" "METROBOARD_PORT='$port' METROBOARD_APP_DIR='$remote_dir' sh -s" <<'REMOTE_COMMAND'
@@ -50,7 +50,7 @@ if [ -f "$METROBOARD_APP_DIR/.env" ]; then
   set +a
 fi
 
-nohup env METROBOARD_PORT="$METROBOARD_PORT" node "$METROBOARD_APP_DIR/server/static-server.mjs" >"$log_file" 2>&1 &
+nohup env METROBOARD_PORT="$METROBOARD_PORT" METROBOARD_APP_DIR="$METROBOARD_APP_DIR" "$METROBOARD_APP_DIR/scripts/run-server.sh" >"$log_file" 2>&1 &
 echo $! >"$pid_file"
 REMOTE_COMMAND
   echo "MetroBoard is serving locally on $target at http://127.0.0.1:$port"

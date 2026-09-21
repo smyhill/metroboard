@@ -51,3 +51,13 @@ The kiosk command is intentionally not installed as an autostart service. It can
 ```
 
 Override the SSH host, remote directory, or port through `METROBOARD_TARGET`, `METROBOARD_REMOTE_DIR`, and `METROBOARD_PORT` respectively.
+
+## Recover after reboot or a process failure
+
+After confirming the kiosk works interactively, install the optional user-scoped recovery services:
+
+```sh
+./scripts/install-services.sh
+```
+
+They restart MetroBoard’s local backend after boot or failure, wait for it before launching Chromium, and restart Chromium if it exits. They do not alter labwc, display rotation, touch, network, SSH, or system-wide services.
