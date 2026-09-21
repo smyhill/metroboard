@@ -22,7 +22,7 @@ npm run build
 
 ssh "$target" "mkdir -p '$remote_dir/dist' '$remote_dir/server' '$remote_dir/scripts'"
 rsync -az --delete "$project_root/dist/" "$target:$remote_dir/dist/"
-rsync -az "$project_root/server/static-server.mjs" "$target:$remote_dir/server/static-server.mjs"
+rsync -az --delete "$project_root/server/" "$target:$remote_dir/server/"
 rsync -az "$project_root/scripts/kiosk.sh" "$target:$remote_dir/scripts/kiosk.sh"
 ssh "$target" "chmod 755 '$remote_dir/scripts/kiosk.sh'"
 
