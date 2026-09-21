@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { bethesdaRedLineDepartures, railLines } from '../../data/departures'
 import type { Departure } from '../../data/departures'
 import './departures.css'
@@ -79,7 +80,31 @@ function Skyline() {
   )
 }
 
+function useLocalClock() {
+  const [now, setNow] = useState(() => new Date())
+
+  useEffect(() => {
+    const interval = window.setInterval(() => setNow(new Date()), 1_000)
+    return () => window.clearInterval(interval)
+  }, [])
+
+  return {
+    date: new Intl.DateTimeFormat('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: '2-digit',
+    }).format(now).replace(',', '').toUpperCase(),
+    time: new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }).format(now),
+  }
+}
+
 export function DeparturesScreen() {
+  const clock = useLocalClock()
+
   return (
     <main className="metroboard" aria-label="MetroBoard departures for Bethesda">
       <section className="terminal-panel">
@@ -89,9 +114,9 @@ export function DeparturesScreen() {
             <h1>Bethesda</h1>
             <p>Departures</p>
           </div>
-          <time className="clock" dateTime="2026-09-20T18:42:00-04:00">
-            <span>Sun Sep 20</span>
-            <strong>18:42</strong>
+          <time className="clock" dateTime={new Date().toISOString()}>
+            <span>{clock.date}</span>
+            <strong>{clock.time}</strong>
           </time>
         </header>
 
