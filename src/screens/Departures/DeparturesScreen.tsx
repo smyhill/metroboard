@@ -29,15 +29,15 @@ function DepartureRow({ departure }: { departure: Departure }) {
 
 function TrainIllustration() {
   return <svg className="train-illustration" viewBox="0 0 300 175" aria-hidden="true"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m10 128 157-105q15-10 34-11h29q17 0 17 17v85q0 15-15 15H78Z" strokeWidth="2.1" />
-    <path d="m10 128 166-75 55-8M10 128l222 1M79 128l7-65M101 114l7-61M124 103l7-57M147 92l7-52" opacity=".86" />
-    <path d="m30 118 8-9m8 4 9-10m8 4 10-11m9 4 10-12m9 4 11-12m10 4 11-12" opacity=".48" />
-    <path d="M180 26h42q13 0 13 13v57h-67V39q0-13 12-13Z" strokeWidth="2" />
-    <path d="M176 101h57v24h-57zM181 34h17v43h-17zM211 34h17v43h-17zM195 103h20v19h-20z" />
-    <path d="M205 104v17M168 84h67M175 92h57M188 126l-15 16m47-16 14 16" />
-    <circle cx="185" cy="112" r="4" fill="currentColor" /><circle cx="224" cy="112" r="4" fill="currentColor" />
-    <path d="M8 130 83 152l149 1M8 130l78 29 149 1M30 142 96 166M67 145l59 23M236 132l48 17M227 140l48 17M215 148l44 18" />
-    <text x="205" y="118" fill="currentColor" stroke="none" textAnchor="middle" fontSize="13" fontWeight="700">M</text>
+    <path d="M18 119 156 28q13-10 29-10h40q16 0 16 16v78q0 15-16 15H74Z" strokeWidth="2.1" />
+    <path d="M18 119 166 53M74 127l5-54m18 42 5-52m18 41 5-51m18 39 5-49" opacity=".7" />
+    <path d="M38 106 52 97l-2 17M61 95l15-9-2 25M85 83l15-9-2 31M109 71l15-9-2 38M133 59l15-8-2 43" opacity=".75" />
+    <path d="M173 29h48q12 0 12 12v54h-67V41q0-12 7-12Z" strokeWidth="2" />
+    <path d="M175 100h57v24h-57zM179 37h18v39h-18zM210 37h18v39h-18zM194 102h20v19h-20z" />
+    <path d="M166 84h67M174 92h58M204 103v17M181 124h44" />
+    <circle cx="185" cy="112" r="4" fill="currentColor" /><circle cx="223" cy="112" r="4" fill="currentColor" />
+    <text x="204" y="118" fill="currentColor" stroke="none" textAnchor="middle" fontSize="13" fontWeight="700">M</text>
+    <path d="M9 134 239 158M36 132l201 37" strokeWidth="1.5" opacity=".8" />
   </g></svg>
 }
 
