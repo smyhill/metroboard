@@ -1,6 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { normalizePredictions, normalizeStations } from './wmata.mjs'
+import { mkdtemp } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { normalizePredictions, normalizeStations, WmataClient } from './wmata.mjs'
 
 test('normalizes, filters, and sorts WMATA train predictions', () => {
   const predictions = normalizePredictions([
@@ -16,7 +19,7 @@ test('normalizes, filters, and sorts WMATA train predictions', () => {
   ])
 })
 
-test('normalizes canonical station records and removes duplicate line codes', () => {
+test('normalizes canonical station records and their served lines', () => {
   const stations = normalizeStations([
     { Code: 'A09', Name: 'Bethesda', LineCode1: 'RD', LineCode2: null },
     { Code: 'C01', Name: 'Metro Center', LineCode1: 'OR', LineCode2: 'BL', LineCode3: 'SV', LineCode4: 'RD' },
@@ -26,4 +29,29 @@ test('normalizes canonical station records and removes duplicate line codes', ()
     { code: 'A09', name: 'Bethesda', lines: ['RD'] },
     { code: 'C01', name: 'Metro Center', lines: ['OR', 'BL', 'SV', 'RD'] },
   ])
+})
+
+test('retains the last successful departure result when WMATA becomes unavailable', async () => {
+  const originalFetch = global.fetch
+  const cacheDirectory = await mkdtemp(join(tmpdir(), 'metroboard-wmata-test-'))
+  const client = new WmataClient({ apiKey: 'test-key', apiBaseUrl: 'https://wmata.test', cachePath: join(cacheDirectory, 'cache.json') })
+
+  global.fetch = async (url) => ({
+    ok: true,
+    json: async () => String(url).includes('jStations')
+      ? { Stations: [{ Code: 'A09', Name: 'Bethesda', LineCode1: 'RD' }] }
+      : { Trains: [{ Destination: 'Shady Grove', Group: '1', Line: 'RD', Min: '3' }] },
+  })
+
+  const live = await client.getDepartures('A09', 'RD')
+  assert.equal(live.source, 'live')
+  assert.equal(live.departures[0].minutes, '3')
+
+  global.fetch = async () => { throw new Error('network down') }
+  const stale = await client.getDepartures('A09', 'RD')
+  assert.equal(stale.source, 'cache')
+  assert.equal(stale.stale, true)
+  assert.equal(stale.departures[0].destination, 'Shady Grove')
+
+  global.fetch = originalFetch
 })

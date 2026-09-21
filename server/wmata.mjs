@@ -92,7 +92,11 @@ export class WmataClient {
     if (this.loaded) return
     this.loaded = true
     try {
-      this.cache = JSON.parse(await readFile(this.cachePath, 'utf8'))
+      const parsed = JSON.parse(await readFile(this.cachePath, 'utf8'))
+      this.cache = {
+        departures: parsed && typeof parsed.departures === 'object' && parsed.departures !== null ? parsed.departures : {},
+        stations: parsed?.stations ?? null,
+      }
     } catch {
       // A missing or corrupt cache must never prevent the display from starting.
     }
@@ -155,8 +159,13 @@ export class WmataClient {
     try {
       const payload = await fetchJson(this.apiUrl(`StationPrediction.svc/json/GetPrediction/${encodeURIComponent(stationCode)}`))
       const departures = normalizePredictions(payload.Trains, lineCode)
-      const stationList = await this.getStations()
-      const station = stationList.stations.find((candidate) => candidate.code === stationCode) ?? { code: stationCode, name: stationCode, lines: [] }
+      let station = { code: stationCode, name: stationCode, lines: [] }
+      try {
+        const stationList = await this.getStations()
+        station = stationList.stations.find((candidate) => candidate.code === stationCode) ?? station
+      } catch {
+        // A prediction response is still useful if a separate station-list request is unavailable.
+      }
       const result = { station, departures, source: 'live', updatedAt: timestamp() }
       this.cache.departures[cacheKey] = result
       await this.saveCache()

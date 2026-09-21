@@ -36,6 +36,11 @@ if [ -f "$pid_file" ]; then
   previous_pid=$(cat "$pid_file")
   if kill -0 "$previous_pid" 2>/dev/null; then
     kill "$previous_pid"
+    attempts=0
+    while kill -0 "$previous_pid" 2>/dev/null && [ "$attempts" -lt 20 ]; do
+      sleep 1
+      attempts=$((attempts + 1))
+    done
   fi
 fi
 
