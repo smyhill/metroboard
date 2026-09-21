@@ -10,6 +10,9 @@ build/
 .env.*
 !.env.example
 
+# Runtime cache written by the local MetroBoard backend.
+data/
+
 # Logs
 *.log
 npm-debug.log*

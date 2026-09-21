@@ -98,7 +98,7 @@
   color: #ff7417;
   border: 0;
   background: transparent;
-  cursor: default;
+  cursor: pointer;
   text-align: left;
   text-transform: uppercase;
   font-weight: 600;
@@ -109,6 +109,7 @@
 .line-marker { width: 30px; height: 30px; flex: 0 0 30px; border: 5px solid currentColor; border-radius: 50%; opacity: .74; }
 .line-option--active { color: #090807; background: #ff7417; clip-path: polygon(0 0, calc(100% - 19px) 0, 100% 50%, calc(100% - 19px) 100%, 0 100%); box-shadow: 0 0 10px rgba(255, 100, 15, .32); }
 .line-option--active .line-marker { opacity: 1; }
+.line-option:focus-visible, .station-list button:focus-visible, .picker-header button:focus-visible, .picker-pagination button:focus-visible, .data-status:focus-visible { outline: 2px solid #ffd0ab; outline-offset: -3px; }
 
 .departure-board { min-width: 0; padding: 9px 30px 0 38px; }
 .departure-labels, .departure-row { display: grid; grid-template-columns: minmax(0, 1fr) 75px 74px; align-items: center; }
@@ -118,7 +119,19 @@
 .departure-row { height: 42px; border-bottom: 1px dashed rgba(255, 116, 23, .35); text-shadow: 0 0 6px rgba(255, 91, 12, .27); }
 .departure-destination { min-width: 0; font-size: 29px; font-weight: 700; line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
 .departure-minutes, .departure-track { font-size: 30px; font-weight: 700; }
-.fixture-note { margin: 6px 0 0; color: #aa4a14; text-transform: uppercase; font-size: 9px; letter-spacing: .08em; }
+.data-status { width: 100%; margin-top: 6px; padding: 0; color: #aa4a14; border: 0; background: transparent; text-align: left; text-transform: uppercase; font: inherit; font-size: 9px; letter-spacing: .08em; cursor: pointer; }
+.data-status--error { color: #ff9a5a; }.data-status:disabled { cursor: wait; }
+.no-departures { margin: 18px 0 0; color: #ff9a5a; font-size: 15px; line-height: 1.35; text-transform: uppercase; }
+
+.station-picker { min-width: 0; padding: 10px 30px 0 38px; }
+.picker-header { height: 29px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px dashed rgba(255, 116, 23, .43); color: #ff8d3d; font-size: 16px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.picker-header button, .picker-pagination button { color: #ff8d3d; border: 0; background: transparent; text-transform: uppercase; font: inherit; font-size: 11px; letter-spacing: .08em; cursor: pointer; }
+.station-list { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px; }
+.station-list button { height: 37px; min-width: 0; padding: 0 10px; overflow: hidden; color: #ff7417; border: 0; border-bottom: 1px dashed rgba(255, 116, 23, .35); background: transparent; text-align: left; text-overflow: ellipsis; white-space: nowrap; text-transform: uppercase; font: inherit; font-size: 15px; font-weight: 700; letter-spacing: -.035em; cursor: pointer; }
+.station-list button:active, .station-list button:hover { color: #090807; background: #ff7417; }
+.picker-empty { margin: 22px 0 0; color: #aa4a14; font-size: 14px; line-height: 1.4; text-transform: uppercase; }
+.picker-pagination { height: 28px; display: flex; align-items: end; justify-content: space-between; color: #aa4a14; font-size: 10px; letter-spacing: .1em; }
+.picker-pagination button:disabled { color: #71320d; cursor: default; }
 
 .terminal-art { min-width: 0; padding: 12px 0 0 35px; border-left: 2px solid #e96010; color: #ff7417; }
 .art-top { height: 136px; display: grid; grid-template-columns: minmax(0, 1fr) 109px; align-items: center; }
@@ -138,5 +151,6 @@
   .terminal-body { height: calc(100% - 88px); grid-template-columns: 250px minmax(0, 1fr) 290px; }
   .line-selector { padding-top: 9px; }.line-option { height: 38px; font-size: 15px; gap: 18px; }.line-marker { width: 25px; height: 25px; flex-basis: 25px; border-width: 4px; }
   .departure-board { padding: 9px 20px 0 24px; }.departure-labels { height: 24px; font-size: 14px; }.departure-row { height: 42px; }.departure-destination { font-size: 26px; }.departure-minutes, .departure-track { font-size: 28px; }
+  .station-picker { padding: 9px 20px 0 24px; }.station-list button { height: 36px; font-size: 13px; }
   .terminal-art { padding: 8px 0 0 24px; }.art-top { height: 132px; grid-template-columns: minmax(0, 1fr) 92px; }.train-illustration { height: 123px; }.art-top p { font-size: 11px; }.skyline { height: 46px; }.skyline-area span { font-size: 8px; }
 }

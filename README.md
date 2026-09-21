@@ -1,6 +1,6 @@
 # MetroBoard
 
-MetroBoard is a purpose-built Washington Metro departures terminal for a 1280×400 Waveshare touchscreen. This first milestone is a static React/Vite interface with clearly isolated Bethesda Red Line development fixtures; it does not call WMATA yet.
+MetroBoard is a purpose-built Washington Metro departures terminal for a 1280×400 Waveshare touchscreen. It runs a local Node backend and a React/Vite interface; the browser only talks to the local backend.
 
 ## Develop on the Mac
 
@@ -16,7 +16,17 @@ npm run build
 npm run serve
 ```
 
-`npm run serve` binds only to `127.0.0.1:4173` and is the same lightweight static server used on the Pi.
+`npm run serve` binds only to `127.0.0.1:4173` and is the same lightweight server used on the Pi. Start it alongside Vite development to proxy `/api` requests locally.
+
+## Enable live WMATA departures
+
+The app starts in clearly marked Bethesda demo-data mode without a key. To enable live predictions and the full station list, create `/home/simon/metroboard/.env` on the Pi with the following single line (use your own WMATA subscription key):
+
+```sh
+WMATA_API_KEY=your-key-here
+```
+
+The deployment script preserves this file, sources it only for the local server process, and never copies it from the Mac or ships it to the browser. Restart the server with `./scripts/deploy.sh --start` after adding or changing the key. The backend uses official rail prediction and station endpoints, times out upstream requests, caches the last successful result on disk, and labels cached data as stale.
 
 ## Deploy to the physical MetroBoard
 

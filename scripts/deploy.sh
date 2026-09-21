@@ -39,6 +39,12 @@ if [ -f "$pid_file" ]; then
   fi
 fi
 
+if [ -f "$METROBOARD_APP_DIR/.env" ]; then
+  set -a
+  . "$METROBOARD_APP_DIR/.env"
+  set +a
+fi
+
 nohup env METROBOARD_PORT="$METROBOARD_PORT" node "$METROBOARD_APP_DIR/server/static-server.mjs" >"$log_file" 2>&1 &
 echo $! >"$pid_file"
 REMOTE_COMMAND
