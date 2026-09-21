@@ -117,6 +117,7 @@
 .departure-labels span:nth-child(2), .departure-labels span:nth-child(3), .departure-minutes, .departure-track { text-align: center; }
 
 .departure-row { height: 42px; border-bottom: 1px dashed rgba(255, 116, 23, .35); text-shadow: 0 0 6px rgba(255, 91, 12, .27); }
+.departure-list { height: 168px; overflow: hidden; }
 .departure-destination { min-width: 0; font-size: 29px; font-weight: 700; line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
 .departure-minutes, .departure-track { font-size: 30px; font-weight: 700; }
 .data-status { width: 100%; margin-top: 6px; padding: 0; color: #aa4a14; border: 0; background: transparent; text-align: left; text-transform: uppercase; font: inherit; font-size: 9px; letter-spacing: .08em; cursor: pointer; }
