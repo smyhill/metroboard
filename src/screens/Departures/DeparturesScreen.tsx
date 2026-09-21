@@ -28,16 +28,15 @@ function DepartureRow({ departure }: { departure: Departure }) {
 }
 
 function TrainIllustration() {
-  return <svg className="train-illustration" viewBox="0 0 300 175" aria-hidden="true"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M18 119 156 28q13-10 29-10h40q16 0 16 16v78q0 15-16 15H74Z" strokeWidth="2.1" />
-    <path d="M18 119 166 53M74 127l5-54m18 42 5-52m18 41 5-51m18 39 5-49" opacity=".7" />
-    <path d="M38 106 52 97l-2 17M61 95l15-9-2 25M85 83l15-9-2 31M109 71l15-9-2 38M133 59l15-8-2 43" opacity=".75" />
-    <path d="M173 29h48q12 0 12 12v54h-67V41q0-12 7-12Z" strokeWidth="2" />
-    <path d="M175 100h57v24h-57zM179 37h18v39h-18zM210 37h18v39h-18zM194 102h20v19h-20z" />
-    <path d="M166 84h67M174 92h58M204 103v17M181 124h44" />
-    <circle cx="185" cy="112" r="4" fill="currentColor" /><circle cx="223" cy="112" r="4" fill="currentColor" />
-    <text x="204" y="118" fill="currentColor" stroke="none" textAnchor="middle" fontSize="13" fontWeight="700">M</text>
-    <path d="M9 134 239 158M36 132l201 37" strokeWidth="1.5" opacity=".8" />
+  return <svg className="train-illustration" viewBox="20 10 230 135" aria-hidden="true"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M41 120 137 38q12-11 29-11h51q17 0 17 17v72q0 14-16 14H77Z" strokeWidth="2.4" />
+    <path d="M41 120 153 58M77 130l4-52m22 40 4-54m22 41 4-51" opacity=".65" />
+    <path d="M61 111 76 101l-2 19M88 94l17-11-2 34M116 77l17-11-2 37" opacity=".78" />
+    <path d="M167 38h48q11 0 11 11v48h-67V49q0-11 8-11Z" strokeWidth="2.1" />
+    <path d="M166 102h59v25h-59zM171 46h19v39h-19zM202 46h19v39h-19zM186 104h20v20h-20z" />
+    <path d="M159 87h67M166 95h60M196 105v17M175 127h42" />
+    <circle cx="176" cy="114" r="4" fill="currentColor" /><circle cx="215" cy="114" r="4" fill="currentColor" />
+    <text x="196" y="120" fill="currentColor" stroke="none" textAnchor="middle" fontSize="13" fontWeight="700">M</text>
   </g></svg>
 }
 
